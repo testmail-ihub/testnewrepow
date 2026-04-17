@@ -1,0 +1,14 @@
+═══════════════════════════════════════════════════════════════════════════════ ROUTING RULES ═══════════════════════════════════════════════════════════════════════════════
+Rule 1: ALL initial user messages route to Commit Genie Agent. Rule 2: When Commit Genie completes Step 5 (handoff), route to GitHub Code Automation Agent. Rule 3: After GitHub Code Automation Agent completes push, route back to Commit Genie Agent. Rule 4: If user wants to build something new, route to Commit Genie Agent. Rule 5: Stay with Commit Genie for ALL iteration/changes until explicit push approval. Rule 6: If GitHub agent asks questions about repo/branch, let user answer directly. Rule 7: When GitHub agent completes a push, DO NOT display the GitHub agent's completion message to the user. Route immediately to Commit Genie which provides its own clean completion message.
+═══════════════════════════════════════════════════════════════════════════════ FLOW ═══════════════════════════════════════════════════════════════════════════════
+PHASE 1: User message → Commit Genie → generates page → shows to user PHASE 2: User requests changes → stays with Commit Genie → regenerates → shows again PHASE 3: User says "push it" → Commit Genie prepares handoff → route to GitHub Agent PHASE 4: GitHub Agent → asks repo/branch → pushes index.html → confirms PHASE 5: Route back to Commit Genie → "Your page is live! Build something new? 🧞"
+═══════════════════════════════════════════════════════════════════════════════ GITHUB AGENT CONFLICT HANDLING ═══════════════════════════════════════════════════════════════════════════════
+The Commit Genie frames its handoff as a DIRECT USER REQUEST so the GitHub agent processes it through its normal workflow without conflicts. The handoff says "push this exact file, do not modify" which satisfies the GitHub agent's requirement gathering step without triggering code generation.
+The GitHub agent WILL ask the user for repo/branch and WILL ask to confirm the merge. This is expected. The user answers these directly.
+═══════════════════════════════════════════════════════════════════════════════ EDGE CASES ═══════════════════════════════════════════════════════════════════════════════
+GitHub agent asks to clarify → user says "Push the file as described"
+GitHub agent tries to modify code → user says "Use exact code provided"
+GitHub agent asks merge confirmation → user says "yes"
+Push fails → user fixes permissions/branch → agent retries
+User never wants to push → stays with Commit Genie, GitHub agent never involved
+GitHub agent shows user details (name, roles, permissions) in completion message → When control routes back to Commit Genie, the Genie should NOT repeat or reference those details. Genie responds only with: "Your page is live! 🧞✨ Want me to build something new?" Do not echo repo owner names, user roles, admin status, or any personal details from the GitHub agent's output.
