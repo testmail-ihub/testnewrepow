@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spokes AI Agents | Knowledge26 Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #061525;
+      color: #e8f4f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    .header-img, .footer-img {
+      width: 100%;
+      display: block;
+      flex-shrink: 0;
+    }
+    .game-card {
+      background: rgba(10,31,51,0.85);
+      border: 1px solid rgba(98,216,78,0.15);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      padding: 32px 28px 28px 28px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 24px 0 rgba(0,199,177,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .game-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #62d84e;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .release-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #00c7b1;
+      margin: 18px 0 10px 0;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .score {
+      font-size: 1.1rem;
+      color: #7a9bb5;
+      margin-bottom: 8px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 18px;
+      margin: 12px 0 0 0;
+    }
+    .game-btn {
+      background: linear-gradient(135deg, #62d84e, #00c7b1);
+      color: #061525;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      box-shadow: 0 0 0 rgba(98,216,78,0.0);
+    }
+    .game-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(98,216,78,0.25);
+    }
+    .feedback {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-top: 10px;
+      min-height: 28px;
+      text-align: center;
+    }
+    .feedback.correct {
+      color: #62d84e;
+    }
+    .feedback.incorrect {
+      color: #ff5e5e;
+    }
+    .restart-btn {
+      margin-top: 18px;
+      background: linear-gradient(135deg, #00c7b1, #62d84e);
+      color: #061525;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(0,199,177,0.18);
+    }
+    @media (max-width: 500px) {
+      .game-card {
+        padding: 18px 8px 16px 8px;
+        max-width: 98vw;
+      }
+      .game-title {
+        font-size: 1.3rem;
+      }
+      .release-name {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/header-banner.jpg" class="header-img" alt="Header" style="min-height:140px; background:#061525;" />
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
+    <div class="game-card">
+      <div class="game-title">ServiceNow Release Quiz</div>
+      <div class="score" id="score">Score: 0 / 0</div>
+      <div class="release-name" id="releaseName">Loading...</div>
+      <div class="btn-group">
+        <button class="game-btn" id="btn-yes">Real Release</button>
+        <button class="game-btn" id="btn-no">Fake Release</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="restart-btn" id="restartBtn" style="display:none;">Restart</button>
+    </div>
+  </div>
+  <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/footer-banner.jpg" class="footer-img" alt="Footer" style="min-height:28px; background:#0a1f33;" />
+  <script>
+    // ServiceNow real releases
+    const realReleases = [
+      "Quebec", "Rome", "San Diego", "Tokyo", "Utah", "Vancouver", "Washington DC", "Orlando", "New York", "Madrid", "Geneva", "Istanbul", "Jakarta", "Kingston", "London", "Madrid", "Nashville", "Orlando", "Paris", "Quebec", "Rome", "San Diego", "Tokyo", "Utah", "Vancouver", "Washington DC"
+    ];
+    // Some fake releases
+    const fakeReleases = [
+      "Zurich", "Berlin", "Sydney", "Venice", "Boston", "Cairo", "Helsinki", "Lisbon", "Monaco", "Oslo", "Prague", "Riga", "Seoul", "Turin", "Valencia"
+    ];
+    let score = 0;
+    let total = 0;
+    let currentRelease = null;
+    let isReal = null;
+    let gameActive = true;
+    const releaseNameDiv = document.getElementById('releaseName');
+    const scoreDiv = document.getElementById('score');
+    const feedbackDiv = document.getElementById('feedback');
+    const btnYes = document.getElementById('btn-yes');
+    const btnNo = document.getElementById('btn-no');
+    const restartBtn = document.getElementById('restartBtn');
+    function getRandomRelease() {
+      if (Math.random() < 0.5) {
+        // Real
+        currentRelease = realReleases[Math.floor(Math.random() * realReleases.length)];
+        isReal = true;
+      } else {
+        currentRelease = fakeReleases[Math.floor(Math.random() * fakeReleases.length)];
+        isReal = false;
+      }
+      releaseNameDiv.textContent = currentRelease;
+      feedbackDiv.textContent = '';
+      feedbackDiv.className = 'feedback';
+    }
+    function updateScore() {
+      scoreDiv.textContent = `Score: ${score} / ${total}`;
+    }
+    function handleGuess(guess) {
+      if (!gameActive) return;
+      total++;
+      if ((guess && isReal) || (!guess && !isReal)) {
+        score++;
+        feedbackDiv.textContent = getRandomTaunt(true);
+        feedbackDiv.className = 'feedback correct';
+      } else {
+        feedbackDiv.textContent = getRandomTaunt(false);
+        feedbackDiv.className = 'feedback incorrect';
+      }
+      updateScore();
+      btnYes.disabled = true;
+      btnNo.disabled = true;
+      setTimeout(() => {
+        if (total >= 10) {
+          endGame();
+        } else {
+          btnYes.disabled = false;
+          btnNo.disabled = false;
+          getRandomRelease();
+        }
+      }, 1100);
+    }
+    function endGame() {
+      gameActive = false;
+      feedbackDiv.textContent = `Game Over! Final Score: ${score} / ${total}`;
+      feedbackDiv.className = 'feedback';
+      restartBtn.style.display = 'inline-block';
+      btnYes.disabled = true;
+      btnNo.disabled = true;
+      releaseNameDiv.textContent = '🎉';
+    }
+    function restartGame() {
+      score = 0;
+      total = 0;
+      gameActive = true;
+      restartBtn.style.display = 'none';
+      btnYes.disabled = false;
+      btnNo.disabled = false;
+      updateScore();
+      getRandomRelease();
+    }
+    function getRandomTaunt(correct) {
+      const correctTaunts = [
+        "Correct! You're a ServiceNow wizard! 🧞",
+        "Nice! You know your releases!",
+        "Spot on!",
+        "Well done!",
+        "Release master!"
+      ];
+      const incorrectTaunts = [
+        "Oops! That's not right.",
+        "Try again!",
+        "Not quite. Keep going!",
+        "Almost!",
+        "Better luck next time!"
+      ];
+      return correct ? correctTaunts[Math.floor(Math.random() * correctTaunts.length)] : incorrectTaunts[Math.floor(Math.random() * incorrectTaunts.length)];
+    }
+    btnYes.addEventListener('click', () => handleGuess(true));
+    btnNo.addEventListener('click', () => handleGuess(false));
+    restartBtn.addEventListener('click', restartGame);
+    // Start game
+    updateScore();
+    getRandomRelease();
+  </script>
+</body>
+</html>
