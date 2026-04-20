@@ -1,124 +1,185 @@
-<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Spokes AI Agents | Knowledge26 Lab</title><link rel="stylesheet" /><style>* {
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body {
-  font-family:'Outfit',sans-serif;
-  background:#061525;
-  color:#e8f4f8;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  overflow-x:hidden;
-}
-
-.header-img,
-.footer-img {
-  width:100%;
-  display:block;
-  flex-shrink:0;
-}
-
-.content-wrapper {
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:40px 20px;
-}
-
-.game-card {
-  background:rgba(10,31,51,0.85);
-  border:1px solid rgba(98,216,78,0.15);
-  border-radius:12px;
-  backdrop-filter:blur(8px);
-  padding:32px 28px 28px 28px;
-  max-width:350px;
-  width:100%;
-  box-shadow:0 0 20px rgba(98,216,78,0.10);
-  text-align:center;
-}
-
-.game-title {
-  font-size:1.5rem;
-  font-weight:700;
-  margin-bottom:18px;
-  color:#62d84e;
-}
-
-.question {
-  font-size:1.1rem;
-  margin-bottom:18px;
-  color:#e8f4f8;
-}
-
-.answers {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.answer-btn {
-  background:linear-gradient(135deg,#62d84e,#00c7b1);
-  color:#061525;
-  font-weight:700;
-  border-radius:10px;
-  padding:12px 24px;
-  border:none;
-  cursor:pointer;
-  transition:transform 0.1s,box-shadow 0.1s;
-  font-size:1rem;
-  outline:none;
-}
-
-.answer-btn:hover {
-  transform:translateY(-2px);
-  box-shadow:0 0 12px #62d84e44;
-}
-
-.status {
-  font-size:1rem;
-  margin-bottom:12px;
-  color:#00c7b1;
-  min-height:24px;
-}
-
-.restart-btn {
-  background:#0e2d47;
-  color:#62d84e;
-  border:1px solid #62d84e;
-  border-radius:8px;
-  padding:10px 20px;
-  font-weight:600;
-  cursor:pointer;
-  margin-top:10px;
-  transition:background 0.2s,color 0.2s;
-}
-
-.restart-btn:hover {
-  background:#62d84e;
-  color:#061525;
-}
-
-@media (max-width:500px) {
-  .game-card { padding:18px 6px 18px 6px; }
-
-  .game-title { font-size:1.1rem; }
-}
-</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spokes AI Agents | Knowledge26 Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #061525;
+      color: #e8f4f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    .header-img, .footer-img {
+      width: 100%;
+      display: block;
+      flex-shrink: 0;
+    }
+    .game-card {
+      background: rgba(10,31,51,0.85);
+      border: 1px solid rgba(98,216,78,0.15);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      padding: 32px 24px 24px 24px;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: 0 0 20px rgba(98,216,78,0.10);
+      text-align: center;
+    }
+    .game-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: #62d84e;
+      letter-spacing: 0.5px;
+    }
+    .question {
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      color: #e8f4f8;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .choice-btn {
+      background: linear-gradient(135deg, #62d84e, #00c7b1);
+      color: #061525;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      font-size: 1rem;
+      box-shadow: 0 0 0 rgba(98,216,78,0.0);
+    }
+    .choice-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(98,216,78,0.25);
+    }
+    .result {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 12px;
+      color: #00c7b1;
+      min-height: 28px;
+    }
+    .restart-btn {
+      margin-top: 18px;
+      background: linear-gradient(135deg, #00c7b1, #62d84e);
+      color: #061525;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 22px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(98,216,78,0.18);
+    }
+    @media (max-width: 500px) {
+      .game-card { padding: 18px 6px 16px 6px; }
+      .game-title { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
   <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/header-banner.jpg" class="header-img" alt="Header" style="min-height:140px; background:#061525;" />
-  <div class="content-wrapper">
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
     <div class="game-card">
       <div class="game-title">ServiceNow Australia Quiz 🦘</div>
-      <div class="status" id="status"></div>
-      <div class="question" id="question"></div>
-      <div class="answers" id="answers"></div>
-      <button class="restart-btn" id="restartBtn" style="display:none;">Restart Quiz</button>
+      <div class="question" id="question">Loading...</div>
+      <div class="choices" id="choices"></div>
+      <div class="result" id="result"></div>
+      <button class="restart-btn" id="restartBtn" style="display:none;">Restart</button>
     </div>
   </div>
   <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/footer-banner.jpg" class="footer-img" alt="Footer" style="min-height:28px; background:#0a1f33;" />
-  
-</body></html>
+  <script>
+    // ServiceNow Australia Quiz Game
+    const questions = [
+      {
+        q: "What is the codename for the ServiceNow Australia release?",
+        choices: ["Canberra", "Sydney", "Melbourne", "Brisbane"],
+        answer: 1
+      },
+      {
+        q: "Which animal is featured in the Australia release mascot?",
+        choices: ["Kangaroo", "Koala", "Platypus", "Emu"],
+        answer: 0
+      },
+      {
+        q: "What color theme is prominent in the Australia release?",
+        choices: ["Green & Teal", "Red & Gold", "Blue & White", "Purple & Orange"],
+        answer: 0
+      }
+    ];
+    let current = 0;
+    let score = 0;
+    const questionDiv = document.getElementById('question');
+    const choicesDiv = document.getElementById('choices');
+    const resultDiv = document.getElementById('result');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function showQuestion() {
+      if (current < questions.length) {
+        questionDiv.textContent = questions[current].q;
+        choicesDiv.innerHTML = '';
+        resultDiv.textContent = '';
+        questions[current].choices.forEach((choice, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'choice-btn';
+          btn.textContent = choice;
+          btn.onclick = () => selectAnswer(idx);
+          choicesDiv.appendChild(btn);
+        });
+        restartBtn.style.display = 'none';
+      } else {
+        showResult();
+      }
+    }
+
+    function selectAnswer(idx) {
+      if (idx === questions[current].answer) {
+        score++;
+        resultDiv.textContent = 'Correct! 🎉';
+      } else {
+        resultDiv.textContent = 'Oops! The correct answer was: ' + questions[current].choices[questions[current].answer];
+      }
+      Array.from(choicesDiv.children).forEach(btn => btn.disabled = true);
+      setTimeout(() => {
+        current++;
+        showQuestion();
+      }, 1100);
+    }
+
+    function showResult() {
+      questionDiv.textContent = 'Quiz Complete!';
+      choicesDiv.innerHTML = '';
+      resultDiv.textContent = `You scored ${score} out of ${questions.length}!`;
+      restartBtn.style.display = 'inline-block';
+    }
+
+    restartBtn.onclick = () => {
+      current = 0;
+      score = 0;
+      showQuestion();
+    };
+
+    // Start game
+    showQuestion();
+  </script>
+</body>
+</html>
