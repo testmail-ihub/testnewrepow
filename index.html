@@ -21,77 +21,102 @@ body {
   display: block;
   flex-shrink: 0;
 }
-.content-card {
+.content-wrapper {
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+.game-card {
   background: rgba(10,31,51,0.85);
   border: 1px solid rgba(98,216,78,0.15);
   border-radius: 12px;
   backdrop-filter: blur(8px);
-  padding: 32px 24px;
   max-width: 400px;
   width: 100%;
-  box-shadow: 0 0 20px rgba(98,216,78,0.10);
+  padding: 32px 24px 24px 24px;
+  box-shadow: 0 4px 24px rgba(0,199,177,0.08);
   text-align: center;
 }
-.game-question {
-  font-size: 1.2rem;
-  margin-bottom: 24px;
+.game-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #62d84e;
+}
+.question {
+  font-size: 1.1rem;
+  margin-bottom: 18px;
   color: #e8f4f8;
-  font-weight: 600;
 }
 .choices {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 .choice-btn {
   background: linear-gradient(135deg, #62d84e, #00c7b1);
   color: #061525;
   font-weight: 700;
+  border: none;
   border-radius: 10px;
   padding: 12px 24px;
-  border: none;
   cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  font-size: 1rem;
+  outline: none;
+}
+.choice-btn:hover, .choice-btn:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px #62d84e44;
+}
+.status {
+  min-height: 28px;
+  font-size: 1rem;
+  color: #00c7b1;
+  margin-bottom: 12px;
+}
+.score {
+  color: #7a9bb5;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+.restart-btn {
+  background: linear-gradient(135deg, #00c7b1, #62d84e);
+  color: #061525;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 22px;
+  cursor: pointer;
+  margin-top: 10px;
   font-size: 1rem;
   transition: transform 0.1s, box-shadow 0.1s;
 }
-.choice-btn:hover {
+.restart-btn:hover, .restart-btn:focus {
   transform: translateY(-2px);
-  box-shadow: 0 0 20px #62d84e44;
-}
-.status {
-  font-size: 1rem;
-  color: #7a9bb5;
-  margin-bottom: 16px;
-  min-height: 24px;
-}
-.restart-btn {
-  margin-top: 12px;
-  background: #0e2d47;
-  color: #62d84e;
-  border: 1px solid #62d84e;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.restart-btn:hover {
-  background: #62d84e;
-  color: #061525;
+  box-shadow: 0 0 12px #00c7b144;
 }
 @media (max-width: 600px) {
-  .content-card { padding: 20px 8px; }
-  .game-question { font-size: 1rem; }
-  .choice-btn { font-size: 0.95rem; padding: 10px 12px; }
+  .game-card {
+    padding: 18px 8px 16px 8px;
+    font-size: 0.98rem;
+  }
+  .game-title {
+    font-size: 1.1rem;
+  }
 }
 </style>
 </head>
 <body>
 <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/header-banner.jpg" class="header-img" alt="Header" style="min-height:140px; background:#061525;" />
-<div style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
-  <div class="content-card">
-    <div class="game-question" id="question">Loading question...</div>
+<div class="content-wrapper">
+  <div class="game-card" role="main" aria-label="ServiceNow Releases Quiz Game">
+    <div class="game-title">ServiceNow Releases Quiz 🧞</div>
+    <div class="score" id="score"></div>
+    <div class="question" id="question"></div>
     <div class="choices" id="choices"></div>
     <div class="status" id="status"></div>
     <button class="restart-btn" id="restartBtn" style="display:none;">Restart</button>
@@ -99,77 +124,88 @@ body {
 </div>
 <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/footer-banner.jpg" class="footer-img" alt="Footer" style="min-height:28px; background:#0a1f33;" />
 <script>
-const questions = [
+const quizData = [
   {
-    q: "Which ServiceNow release introduced Flow Designer?",
+    question: "Which ServiceNow release introduced Flow Designer?",
     choices: ["London", "Madrid", "Orlando", "Paris"],
     answer: "London"
   },
   {
-    q: "What is the codename for the ServiceNow release after Quebec?",
-    choices: ["Rome", "San Diego", "Tokyo", "Utah"],
-    answer: "Rome"
+    question: "What is the codename for the ServiceNow 'San Diego' release?",
+    choices: ["Q1 2022", "Q3 2021", "Q2 2023", "Q4 2020"],
+    answer: "Q1 2022"
   },
   {
-    q: "Which release brought the Now Experience UI Framework?",
-    choices: ["Orlando", "Paris", "Quebec", "San Diego"],
+    question: "Which release brought the Now Experience UI Framework?",
+    choices: ["Orlando", "Paris", "Rome", "Tokyo"],
     answer: "Orlando"
   },
   {
-    q: "Which ServiceNow release was named after a city in Japan?",
-    choices: ["Tokyo", "Paris", "Rome", "Utah"],
-    answer: "Tokyo"
+    question: "What is the main color theme of ServiceNow's UI?",
+    choices: ["Green", "Blue", "Red", "Orange"],
+    answer: "Green"
   },
   {
-    q: "Which release introduced App Engine Studio?",
-    choices: ["Paris", "Quebec", "Rome", "San Diego"],
-    answer: "Quebec"
+    question: "Which release introduced App Engine Studio?",
+    choices: ["Paris", "Rome", "San Diego", "Tokyo"],
+    answer: "Rome"
   }
 ];
 let current = 0;
 let score = 0;
-const questionDiv = document.getElementById('question');
-const choicesDiv = document.getElementById('choices');
-const statusDiv = document.getElementById('status');
+const questionEl = document.getElementById('question');
+const choicesEl = document.getElementById('choices');
+const statusEl = document.getElementById('status');
+const scoreEl = document.getElementById('score');
 const restartBtn = document.getElementById('restartBtn');
 function showQuestion() {
-  if (current >= questions.length) {
-    questionDiv.textContent = `Game Over! Your score: ${score} / ${questions.length}`;
-    choicesDiv.innerHTML = '';
-    statusDiv.textContent = score === questions.length ? "Perfect! You're a ServiceNow Release Guru!" : "Try again to improve your score.";
+  if (current >= quizData.length) {
+    questionEl.textContent = "Quiz Complete!";
+    choicesEl.innerHTML = "";
+    statusEl.textContent = `Your final score: ${score} / ${quizData.length}`;
     restartBtn.style.display = 'inline-block';
     return;
   }
-  const q = questions[current];
-  questionDiv.textContent = q.q;
-  choicesDiv.innerHTML = '';
+  const q = quizData[current];
+  questionEl.textContent = q.question;
+  choicesEl.innerHTML = "";
+  statusEl.textContent = "";
   q.choices.forEach(choice => {
     const btn = document.createElement('button');
     btn.className = 'choice-btn';
     btn.textContent = choice;
-    btn.onclick = () => checkAnswer(choice);
-    choicesDiv.appendChild(btn);
+    btn.tabIndex = 0;
+    btn.onclick = () => selectAnswer(choice);
+    choicesEl.appendChild(btn);
   });
-  statusDiv.textContent = '';
+  scoreEl.textContent = `Question ${current + 1} of ${quizData.length} | Score: ${score}`;
   restartBtn.style.display = 'none';
 }
-function checkAnswer(choice) {
-  const correct = questions[current].answer;
+function selectAnswer(choice) {
+  const correct = quizData[current].answer;
   if (choice === correct) {
-    statusDiv.textContent = 'Correct!';
+    statusEl.textContent = "Correct! 🎉";
     score++;
   } else {
-    statusDiv.textContent = `Wrong! The correct answer was: ${correct}`;
+    statusEl.textContent = `Incorrect. The correct answer was: ${correct}.`;
   }
-  current++;
-  setTimeout(showQuestion, 1200);
+  Array.from(choicesEl.children).forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) {
+      btn.style.border = '2px solid #62d84e';
+    }
+  });
+  setTimeout(() => {
+    current++;
+    showQuestion();
+  }, 1200);
 }
-restartBtn.onclick = function() {
+restartBtn.onclick = () => {
   current = 0;
   score = 0;
   showQuestion();
 };
-showQuestion();
+window.onload = showQuestion;
 </script>
 </body>
 </html>
