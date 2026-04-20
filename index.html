@@ -1,26 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spokes AI Agents | Knowledge26 Lab</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
+<html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Spokes AI Agents | Knowledge26 Lab</title><link rel="stylesheet" /><style>* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
 body {
-  font-family: 'Outfit', sans-serif;
-  background: #061525;
-  color: #e8f4f8;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+  font-family:'Outfit',sans-serif;
+  background:#061525;
+  color:#e8f4f8;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow-x:hidden;
 }
-.header-img, .footer-img {
-  width: 100%;
-  display: block;
-  flex-shrink: 0;
+
+.header-img,
+.footer-img {
+  width:100%;
+  display:block;
+  flex-shrink:0;
 }
+
 .content-wrapper {
   flex:1;
   display:flex;
@@ -28,184 +28,97 @@ body {
   justify-content:center;
   padding:40px 20px;
 }
+
 .game-card {
-  background: rgba(10,31,51,0.85);
-  border: 1px solid rgba(98,216,78,0.15);
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  max-width: 400px;
-  width: 100%;
-  padding: 32px 24px 24px 24px;
-  box-shadow: 0 4px 24px rgba(0,199,177,0.08);
-  text-align: center;
+  background:rgba(10,31,51,0.85);
+  border:1px solid rgba(98,216,78,0.15);
+  border-radius:12px;
+  backdrop-filter:blur(8px);
+  padding:32px 28px 28px 28px;
+  max-width:350px;
+  width:100%;
+  box-shadow:0 0 20px rgba(98,216,78,0.10);
+  text-align:center;
 }
+
 .game-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #62d84e;
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:18px;
+  color:#62d84e;
 }
+
 .question {
-  font-size: 1.1rem;
-  margin-bottom: 18px;
-  color: #e8f4f8;
+  font-size:1.1rem;
+  margin-bottom:18px;
+  color:#e8f4f8;
 }
-.choices {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 18px;
+
+.answers {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-bottom:18px;
 }
-.choice-btn {
-  background: linear-gradient(135deg, #62d84e, #00c7b1);
-  color: #061525;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  padding: 12px 24px;
-  cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-  font-size: 1rem;
-  outline: none;
+
+.answer-btn {
+  background:linear-gradient(135deg,#62d84e,#00c7b1);
+  color:#061525;
+  font-weight:700;
+  border-radius:10px;
+  padding:12px 24px;
+  border:none;
+  cursor:pointer;
+  transition:transform 0.1s,box-shadow 0.1s;
+  font-size:1rem;
+  outline:none;
 }
-.choice-btn:hover, .choice-btn:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 0 12px #62d84e44;
+
+.answer-btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 0 12px #62d84e44;
 }
+
 .status {
-  min-height: 28px;
-  font-size: 1rem;
-  color: #00c7b1;
-  margin-bottom: 12px;
+  font-size:1rem;
+  margin-bottom:12px;
+  color:#00c7b1;
+  min-height:24px;
 }
-.score {
-  color: #7a9bb5;
-  font-size: 1rem;
-  margin-bottom: 8px;
-}
+
 .restart-btn {
-  background: linear-gradient(135deg, #00c7b1, #62d84e);
-  color: #061525;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 22px;
-  cursor: pointer;
-  margin-top: 10px;
-  font-size: 1rem;
-  transition: transform 0.1s, box-shadow 0.1s;
+  background:#0e2d47;
+  color:#62d84e;
+  border:1px solid #62d84e;
+  border-radius:8px;
+  padding:10px 20px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:10px;
+  transition:background 0.2s,color 0.2s;
 }
-.restart-btn:hover, .restart-btn:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 0 12px #00c7b144;
+
+.restart-btn:hover {
+  background:#62d84e;
+  color:#061525;
 }
-@media (max-width: 600px) {
-  .game-card {
-    padding: 18px 8px 16px 8px;
-    font-size: 0.98rem;
-  }
-  .game-title {
-    font-size: 1.1rem;
-  }
+
+@media (max-width:500px) {
+  .game-card { padding:18px 6px 18px 6px; }
+
+  .game-title { font-size:1.1rem; }
 }
-</style>
-</head>
-<body>
-<img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/header-banner.jpg" class="header-img" alt="Header" style="min-height:140px; background:#061525;" />
-<div class="content-wrapper">
-  <div class="game-card" role="main" aria-label="ServiceNow Releases Quiz Game">
-    <div class="game-title">ServiceNow Releases Quiz 🧞</div>
-    <div class="score" id="score"></div>
-    <div class="question" id="question"></div>
-    <div class="choices" id="choices"></div>
-    <div class="status" id="status"></div>
-    <button class="restart-btn" id="restartBtn" style="display:none;">Restart</button>
+</style></head><body>
+  <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/header-banner.jpg" class="header-img" alt="Header" style="min-height:140px; background:#061525;" />
+  <div class="content-wrapper">
+    <div class="game-card">
+      <div class="game-title">ServiceNow Australia Quiz 🦘</div>
+      <div class="status" id="status"></div>
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+      <button class="restart-btn" id="restartBtn" style="display:none;">Restart Quiz</button>
+    </div>
   </div>
-</div>
-<img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/footer-banner.jpg" class="footer-img" alt="Footer" style="min-height:28px; background:#0a1f33;" />
-<script>
-const quizData = [
-  {
-    question: "Which ServiceNow release introduced Flow Designer?",
-    choices: ["London", "Madrid", "Orlando", "Paris"],
-    answer: "London"
-  },
-  {
-    question: "What is the codename for the ServiceNow 'San Diego' release?",
-    choices: ["Q1 2022", "Q3 2021", "Q2 2023", "Q4 2020"],
-    answer: "Q1 2022"
-  },
-  {
-    question: "Which release brought the Now Experience UI Framework?",
-    choices: ["Orlando", "Paris", "Rome", "Tokyo"],
-    answer: "Orlando"
-  },
-  {
-    question: "What is the main color theme of ServiceNow's UI?",
-    choices: ["Green", "Blue", "Red", "Orange"],
-    answer: "Green"
-  },
-  {
-    question: "Which release introduced App Engine Studio?",
-    choices: ["Paris", "Rome", "San Diego", "Tokyo"],
-    answer: "Rome"
-  }
-];
-let current = 0;
-let score = 0;
-const questionEl = document.getElementById('question');
-const choicesEl = document.getElementById('choices');
-const statusEl = document.getElementById('status');
-const scoreEl = document.getElementById('score');
-const restartBtn = document.getElementById('restartBtn');
-function showQuestion() {
-  if (current >= quizData.length) {
-    questionEl.textContent = "Quiz Complete!";
-    choicesEl.innerHTML = "";
-    statusEl.textContent = `Your final score: ${score} / ${quizData.length}`;
-    restartBtn.style.display = 'inline-block';
-    return;
-  }
-  const q = quizData[current];
-  questionEl.textContent = q.question;
-  choicesEl.innerHTML = "";
-  statusEl.textContent = "";
-  q.choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = choice;
-    btn.tabIndex = 0;
-    btn.onclick = () => selectAnswer(choice);
-    choicesEl.appendChild(btn);
-  });
-  scoreEl.textContent = `Question ${current + 1} of ${quizData.length} | Score: ${score}`;
-  restartBtn.style.display = 'none';
-}
-function selectAnswer(choice) {
-  const correct = quizData[current].answer;
-  if (choice === correct) {
-    statusEl.textContent = "Correct! 🎉";
-    score++;
-  } else {
-    statusEl.textContent = `Incorrect. The correct answer was: ${correct}.`;
-  }
-  Array.from(choicesEl.children).forEach(btn => {
-    btn.disabled = true;
-    if (btn.textContent === correct) {
-      btn.style.border = '2px solid #62d84e';
-    }
-  });
-  setTimeout(() => {
-    current++;
-    showQuestion();
-  }, 1200);
-}
-restartBtn.onclick = () => {
-  current = 0;
-  score = 0;
-  showQuestion();
-};
-window.onload = showQuestion;
-</script>
-</body>
-</html>
+  <img src="https://raw.githubusercontent.com/testmail-ihub/spokes-ai-assets/main/footer-banner.jpg" class="footer-img" alt="Footer" style="min-height:28px; background:#0a1f33;" />
+  
+</body></html>
